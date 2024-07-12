@@ -37,11 +37,11 @@
 
 ## Overview
 
-The sun simulator is a tool that will be designed to simulate the orbit used in any SpaceLab's mission. Although still under development, the sun simulator is expected to accurately replicate the conditions of the mission, providing a controllable indoor test facility under laboratory conditions. It will allow engineers and scientists to test the spacecraft's functionality and performance before it is launched.
+This project has been developed to simulate Global Navigation Satellite System (GNSS) signals, for research and development purposes in the SpaceLab laboratory. It is useful for academics, engineers, and enthusiasts working with satellite navigation technologies.The sun simulator is a tool that will be designed to simulate the orbit used in any SpaceLab's mission. Although still under development, the sun simulator is expected to accurately replicate the conditions of the mission, providing a controllable indoor test facility under laboratory conditions. It will allow engineers and scientists to test the spacecraft's functionality and performance before it is launched.
 
 ## Repository Organization
 	- doc: Technical documentation (including user guide).
-	- gps: gps files project (sources and configs).
+	- gps: GPS files project (sources and configs).
 
 ## License
 
