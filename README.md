@@ -45,7 +45,7 @@ This project has been developed to simulate Global Navigation Satellite System (
 
 ## License
 
-This project is open-source under three different licenses: GNU General Public License v3.0 for firmware and software, CERN Open Hardware License v2.0 for hardware, and CC BY-SA 4.0 for the documentation and mechanical project.
+This project is open-source under two different licenses: GNU General Public License v3.0 for firmware and software, and CC BY-SA 4.0 for the documentation.
 
 ## Releases
 
