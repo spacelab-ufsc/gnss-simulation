@@ -98,7 +98,6 @@ def modulation(rawdata,codeLength,sv_id,fc,n):
     #generate PN spreading codes multiplying each 31 samples by the PRN code
     IQchip = np.zeros(len(data))
     for k in range(0,len(data),codeLength):
-        """IQchip[k:k+codeLength]=data[k:k+codeLength]*gc"""
         if k + codeLength <= len(data):
             IQchip[k:k+codeLength] = data[k:k+codeLength] * gc
         else:
@@ -134,6 +133,23 @@ def modulation(rawdata,codeLength,sv_id,fc,n):
 
     return BPSignal
 
+###Downsampler
+def downsample(inn,k):
+    lengthIn = len(inn)
+    out=[]
+    for i in range(0,lengthIn,k):
+        out.append(inn[i])
+    return np.array(out)
+
+
+###Demapper
+def demapper(data):
+    rawdata=np.zeros(len(data))
+    for i in range(len(data)):
+        if data[i]<0:
+            rawdata[i]=1
+    return rawdata
+
 ###BPSKdemodulation
 def demodulation(data,codeLength,sv_id,fc,fs,nbit):
     fs=Fs
@@ -142,8 +158,46 @@ def demodulation(data,codeLength,sv_id,fc,fs,nbit):
 
     #Local carrier
     localCarrier = np.cos(2*np.pi*n*round(fc/fs))
+    BBsignal = data*localCarrier
+
+    #Root Raised Cosine Filter  
+    RollOff=0.5
+    ro=1
+    delta=0
+    ks=16
+    NT=6*ks
+    h=RRC(NT, ks, RollOff, ro, delta)
+
+    ChipFilt=lpf(BBsignal,h)
+
+    #Chips downsampler 
+    Chip= downsample(ChipFilt[97:],16)
+
+    #1/sqrt(2)
+    Chip=Chip/np.sqrt(2)
+
+    #Generate PRN code (PRN code is done by a m-algorithm with 31 samples, that can be encreased to 1023, with a vector of 10 components instead of 31)
+    shift_G1_reg = np.ones(10)
+    shift_G2_reg = np.ones(10)
+    SV = sv_id
+    gc = gold_code(codeLength,shift_G1_reg,shift_G2_reg,SV)
+
+    #convolution to get the data
+    U = gc
+    V = Chip
+    IQ = np.correlate(V, U, mode='full')
     
-    return
+    #symbols downsampler   
+    IQ=downsample(IQ[nbit*codeLength-7:],codeLength)    
+
+    #rawdata to IQ symbols 
+    data = demapper(IQ)
+
+    out=data
+    Id = IQ
+    Qd = np.zeros(len(Id))
+
+    return out,Id,Qd
 
 
 
@@ -155,3 +209,5 @@ def demodulation(data,codeLength,sv_id,fc,fs,nbit):
 """print(lpf([1,2,3,4],[5,6]))"""
 """a=modulation([1, 0, 1, 1, 0, 1],31,1,1575.42e6,1)
 print(a[0:14])"""
+"""print(demapper([1, -1, 5, -4, 1, 1]))"""
+"""print(downsample([1, 2,  3, 4, 1, 2, 3, 4, 1, 2, 3, 4],4))"""
