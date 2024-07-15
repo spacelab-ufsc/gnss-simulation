@@ -37,7 +37,7 @@
 
 ## Overview
 
-This project has been developed to simulate Global Navigation Satellite System (GNSS) signals, for research and development purposes in the SpaceLab laboratory. It is useful for academics, engineers, and enthusiasts working with satellite navigation technologies.The sun simulator is a tool that will be designed to simulate the orbit used in any SpaceLab's mission. Although still under development, the sun simulator is expected to accurately replicate the conditions of the mission, providing a controllable indoor test facility under laboratory conditions. It will allow engineers and scientists to test the spacecraft's functionality and performance before it is launched.
+This project has been developed to simulate Global Navigation Satellite System (GNSS) signals, for research and development purposes in the SpaceLab laboratory. It is useful for academics, engineers, and enthusiasts working with satellite navigation technologies.
 
 ## Repository Organization
 	- doc: Technical documentation (including user guide).
@@ -45,7 +45,7 @@ This project has been developed to simulate Global Navigation Satellite System (
 
 ## License
 
-This project is open-source under three different licenses: GNU General Public License v3.0 for firmware and software, CERN Open Hardware License v2.0 for hardware, and CC BY-SA 4.0 for the documentation and mechanical project.
+This project is open-source under two different licenses: GNU General Public License v3.0 for firmware and software, and CC BY-SA 4.0 for the documentation.
 
 ## Releases
 
