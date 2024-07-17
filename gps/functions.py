@@ -199,8 +199,60 @@ def demodulation(data,codeLength,sv_id,fc,fs,nbit):
 
     return out,Id,Qd
 
+###Awgn
 
+def awgn(signal, snr):
+    signal_power = np.mean(signal**2)
+    snr_linear = 10**(snr / 10)
+    noise_power = signal_power / snr_linear
+    noise = np.sqrt(noise_power) * np.random.normal(size=signal.shape)
+    noisy_signal = signal + noise
+    return noisy_signal
 
+###Signal Characterstics 
+
+# rawdata = np.random.randint(0, 2, size=50000)
+rawdata = [1, 0, 1, 1, 0, 1]
+# rawdata = [1, 0, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1 ,0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1, 1, 0, 1 ,1 ,1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 1]
+
+fc = 1575.42e6       # Carrier frequency
+sv_id = 1           # Satellite Vehicle ID
+n = 1                # BPSK(1) fc = n*1.023e6; %code rate BPSK(n) spreading code rate n*1.023 MHz
+codeLength = 31      # round(1023/n)
+
+#Signal modulation                              
+
+data = modulation(rawdata, codeLength, sv_id, fc, n)
+
+#Frequency Domain
+
+dataFFT=np.fft.fft(rawdata)
+dataFFT=np.fft.fftshift(dataFFT)
+
+#FFT of modulated signal 
+modulated=np.fft.fft(data[0:round(len(data))])
+modulated=np.fft.fftshift(modulated)
+
+w0 = np.arange(0, 2*np.pi, 2*np.pi/len(data))
+
+fs=Fs
+
+f=(w0*fs)/(np.pi*2)
+f1 = np.linspace(0, f[-1], len(modulated))
+
+dataFFT_abs = np.abs(dataFFT)
+dataFFT=np.concatenate([dataFFT_abs, np.zeros(len(modulated) - len(dataFFT_abs))])
+
+#Channel multipath configuration
+#AWGN -20 -15 -10 -5 0 1 20
+SNR = 5
+
+channel_signal=awgn(data, SNR, 'measured')
+
+#Signal demodulation                            
+nbit = len(rawdata)
+
+[demodulated,Id,Qd] = demodulation(channel_signal, codeLength, sv_id, fc, fs, nbit)
 
 """print(gold_code(5,[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],[13, 14, 15, 16, 17, 18 ,19 ,20, 21, 22, 23, 24],3))"""
 """print(RRC(96,16,0.5,1,0))"""
