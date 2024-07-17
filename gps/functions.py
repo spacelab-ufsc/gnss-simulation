@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib.pyplot as plt
 Fs=50
 
 ###Mapper
@@ -47,14 +48,14 @@ def gold_code(codelength,shift_G1_reg,shift_G2_reg,SV):
     #Creating CA code
     for k1 in range(len):
         g1[k1]=shift_G1_reg[9]
-        g2[k1]=(shift_G2_reg[sv[0]] + shift_G2_reg[sv[1]])%2
+        g2[k1]=(shift_G2_reg[sv[0]-1] + shift_G2_reg[sv[1]-1])%2
         l1_CA_code[k1]=(g1[k1]+g2[k1])%2
     
         feedback_G1 = (shift_G1_reg[2] + shift_G1_reg[9])%2
         feedback_G2 = (shift_G2_reg[1] + shift_G2_reg[2] + shift_G2_reg[5] + shift_G2_reg[7] + shift_G2_reg[8] + shift_G2_reg[9])%2
 
         #shifting vector
-        for k2 in range(9,1,-1):
+        for k2 in range(9,0,-1):
             shift_G1_reg[k2] = shift_G1_reg[k2-1]
             shift_G2_reg[k2] = shift_G2_reg[k2-1]
     
@@ -174,7 +175,7 @@ def demodulation(data,codeLength,sv_id,fc,fs,nbit):
     Chip= downsample(ChipFilt[97:],16)
 
     #1/sqrt(2)
-    Chip=Chip/np.sqrt(2)
+    Chip=Chip*np.sqrt(2)
 
     #Generate PRN code (PRN code is done by a m-algorithm with 31 samples, that can be encreased to 1023, with a vector of 10 components instead of 31)
     shift_G1_reg = np.ones(10)
@@ -185,11 +186,17 @@ def demodulation(data,codeLength,sv_id,fc,fs,nbit):
     #convolution to get the data
     U = gc
     V = Chip
+    l=max(len(U),len(V))
+    u=np.zeros(l)
+    v=np.zeros(l)
+    u[0:len(U)]=U
+    v[0:len(V)]=V
+    U,V=u,v
     IQ = np.correlate(V, U, mode='full')
-    
-    #symbols downsampler   
-    IQ=downsample(IQ[nbit*codeLength-7:],codeLength)    
 
+    #symbols downsampler   
+    IQ=downsample(IQ[nbit*codeLength-7::],codeLength)    
+    
     #rawdata to IQ symbols 
     data = demapper(IQ)
 
@@ -209,11 +216,12 @@ def awgn(signal, snr):
     noisy_signal = signal + noise
     return noisy_signal
 
+
 ###Signal Characterstics 
 
 # rawdata = np.random.randint(0, 2, size=50000)
-rawdata = [1, 0, 1, 1, 0, 1]
-# rawdata = [1, 0, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1 ,0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1, 1, 0, 1 ,1 ,1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 1]
+# rawdata = [1, 0, 1, 1, 0, 1]
+rawdata = [1, 0, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1 ,0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1, 1, 0, 1 ,1 ,1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 1]
 
 fc = 1575.42e6       # Carrier frequency
 sv_id = 1           # Satellite Vehicle ID
@@ -247,19 +255,57 @@ dataFFT=np.concatenate([dataFFT_abs, np.zeros(len(modulated) - len(dataFFT_abs))
 #AWGN -20 -15 -10 -5 0 1 20
 SNR = 5
 
-channel_signal=awgn(data, SNR, 'measured')
+channel_signal=awgn(data, SNR)
 
 #Signal demodulation                            
 nbit = len(rawdata)
 
 [demodulated,Id,Qd] = demodulation(channel_signal, codeLength, sv_id, fc, fs, nbit)
 
-"""print(gold_code(5,[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],[13, 14, 15, 16, 17, 18 ,19 ,20, 21, 22, 23, 24],3))"""
+print(demodulated)
+
+###  Multiple SNR Simulation
+#channel multipath configuration
+#AWGN -20 -15 -10 -5 0 1 20
+SNR =np.array([-20, -19.5, -19, -18.5, -18 ,-17.5, -17, -16.5, -16, -15.5, -15, -14.5, -14, -13.5, -13, -12.5, -12, 0, 5, 10, 15,])
+
+#MATLAB CURVA TEORICA BERTOOL;
+# SNR = 20;
+
+BER=[]
+
+for i in range(len(SNR)):
+    channel_signal=awgn(data, SNR[i])
+
+    #Signal demodulation                            
+    nbit = len(rawdata)
+    [demodulated,Id,Qd] = demodulation(channel_signal, codeLength, sv_id, fc, fs, nbit)
+    
+    #BER Analysis                                  
+    b_error= np.sum(np.logical_xor(demodulated, rawdata))
+    BER.append(b_error/len(rawdata))
+
+#Figure
+plt.figure()
+plt.semilogy(SNR, BER)
+plt.legend(['Canal AWGN'])
+plt.title('SNR x BER com modulação BPSK')
+plt.xlabel('SNR (dB)')
+plt.ylabel('BER')
+plt.grid(True, which='both')
+plt.show()
+
+
+"""print(gold_code(7,[99, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],[13, 14, 15, 16, 17, 18 ,19 ,20, 21, 22, 23, 24],3))"""
 """print(RRC(96,16,0.5,1,0))"""
 """print(len(modulation([1, 0, 1, 1, 0, 1],31,1,1575.42e6,1)))"""
 """print(mapper([1, 0, 1, 1, 0, 1]))"""
 """print(lpf([1,2,3,4],[5,6]))"""
 """a=modulation([1, 0, 1, 1, 0, 1],31,1,1575.42e6,1)
-print(a[0:14])"""
+#print(a[0:14])
+#print(a[2961:2975])
+print(a)"""
 """print(demapper([1, -1, 5, -4, 1, 1]))"""
 """print(downsample([1, 2,  3, 4, 1, 2, 3, 4, 1, 2, 3, 4],4))"""
+"""print(modulation([1, 0, 1, 1, 0, 1], 31,1,1575.42e6,1))"""
+"""print(demodulation(modulation([1, 0, 1, 1, 0, 1], 31,1,1575.42e6,1),31,1,1575.42e6,50,1))"""
