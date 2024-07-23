@@ -126,6 +126,7 @@ def modulation(rawdata,codeLength,sv_id,fc,n):
     #Local carrier: Heterodyned signal    (Each chip is represented by 2 cycles with 4 bits >> fc/fs=.5)
     b = round(len(ChipFilt)/2)
     t=np.arange(-b,b)
+    global Fs
     Fs=fs
     fc = fs/4
     fs = fs*fc
@@ -267,7 +268,7 @@ print(demodulated)
 ###  Multiple SNR Simulation
 #channel multipath configuration
 #AWGN -20 -15 -10 -5 0 1 20
-SNR =np.array([-20, -19.5, -19, -18.5, -18 ,-17.5, -17, -16.5, -16, -15.5, -15, -14.5, -14, -13.5, -13, -12.5, -12, 0, 5, 10, 15,])
+SNR =np.array([-20, -19.5, -19, -18.5, -18 ,-17.5, -17, -16.5, -16, -15.5, -15, -14.5, -14, -13.5, -13, -12.5, -12, 0, 5, 10, 15])
 
 #MATLAB CURVA TEORICA BERTOOL;
 # SNR = 20;
@@ -294,18 +295,3 @@ plt.xlabel('SNR (dB)')
 plt.ylabel('BER')
 plt.grid(True, which='both')
 plt.show()
-
-
-"""print(gold_code(7,[99, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],[13, 14, 15, 16, 17, 18 ,19 ,20, 21, 22, 23, 24],3))"""
-"""print(RRC(96,16,0.5,1,0))"""
-"""print(len(modulation([1, 0, 1, 1, 0, 1],31,1,1575.42e6,1)))"""
-"""print(mapper([1, 0, 1, 1, 0, 1]))"""
-"""print(lpf([1,2,3,4],[5,6]))"""
-"""a=modulation([1, 0, 1, 1, 0, 1],31,1,1575.42e6,1)
-#print(a[0:14])
-#print(a[2961:2975])
-print(a)"""
-"""print(demapper([1, -1, 5, -4, 1, 1]))"""
-"""print(downsample([1, 2,  3, 4, 1, 2, 3, 4, 1, 2, 3, 4],4))"""
-"""print(modulation([1, 0, 1, 1, 0, 1], 31,1,1575.42e6,1))"""
-"""print(demodulation(modulation([1, 0, 1, 1, 0, 1], 31,1,1575.42e6,1),31,1,1575.42e6,50,1))"""
