@@ -220,9 +220,9 @@ def awgn(signal, snr):
 
 ###Signal Characterstics 
 
-# rawdata = np.random.randint(0, 2, size=50000)
-# rawdata = [1, 0, 1, 1, 0, 1]
-rawdata = [1, 0, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1 ,0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1, 1, 0, 1 ,1 ,1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 1]
+# rawdata = np.random.randint(0, 2, size=5000)
+rawdata = [1, 0, 1, 1, 0, 1]
+# rawdata = [1, 0, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1 ,0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1, 1, 0, 1 ,1 ,1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 1]
 
 fc = 1575.42e6       # Carrier frequency
 sv_id = 1           # Satellite Vehicle ID
