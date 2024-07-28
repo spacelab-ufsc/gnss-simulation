@@ -79,7 +79,7 @@ def RRC(NT, ks, RollOff, ro, delta):
 
 ###BPSKmodulation
 def modulation(rawdata,codeLength,sv_id,fc,n):
-    f0=1023e6
+    f0=1.023e6
     fChip=n*f0                  
     fs=50
 
