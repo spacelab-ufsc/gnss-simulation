@@ -1,3 +1,8 @@
+"""
+Author MATLAB Development: Yunior Alcantara Guevara 
+Author Python: Sarah Cabanal-Duvillard
+Date: July 2024
+"""
 import numpy as np
 import matplotlib.pyplot as plt
 
