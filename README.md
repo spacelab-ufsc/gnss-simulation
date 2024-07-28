@@ -6,27 +6,6 @@
 <h4 align="center">Simulation of GNSS to test Radio Occultations Algorithms in SpaceLab's Radio Occultation satellites.</h4>
 
 <p align="center">
-	<a href="https://github.com/spacelab-ufsc/spacelab#versioning">
-		<img src="https://img.shields.io/badge/status-in%20development-red?style=for-the-badge">
-	</a>
-	<a href="https://github.com/spacelab-ufsc/sun-simulator/releases">
-		<img alt="GitHub release (latest by date)" src="https://img.shields.io/github/v/release/spacelab-ufsc/gnss-simulation?style=for-the-badge">
-	</a>
-	<a href="https://github.com/spacelab-ufsc/gnss-simulation/releases">
-		<img alt="GitHub commits since latest release (by date)" src="https://img.shields.io/github/commits-since/spacelab-ufsc/sun-simulator/latest?style=for-the-badge">
-	</a>
-	<a href="https://github.com/spacelab-ufsc/gnss-simulation/commits/master">
-		<img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/spacelab-ufsc/gnss-simulations?style=for-the-badge">
-	</a>
-	<a href="https://github.com/spacelab-ufsc/gnss-simulation/issues">
-		<img alt="GitHub issues" src="https://img.shields.io/github/issues/spacelab-ufsc/gnss-simulation?style=for-the-badge">
-	</a>
-	<a href="https://github.com/spacelab-ufsc/gnss-simulation/graphs/contributors">
-		<img alt="GitHub contributors" src="https://img.shields.io/github/contributors/spacelab-ufsc/gnss-simulation?color=yellow&style=for-the-badge">
-	</a>
-</p>
-
-<p align="center">
   	<a href="#overview">Overview</a> •
   	<a href="#repository-organization">Repository Organizarion</a> •
   	<a href="#license">License</a> •
