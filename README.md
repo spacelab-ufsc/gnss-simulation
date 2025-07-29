@@ -3,7 +3,7 @@
 	<br>
 </h1>
 
-<h4 align="center">Simulation of GNSS to test Radio Occultations Algorithms in SpaceLab's Radio Occultation satellites.</h4>
+<h4 align="center">GNSS simulator for testing SpaceLab's Radio Occultation Instrument.<h4>
 
 <p align="center">
   	<a href="#overview">Overview</a> •
@@ -20,8 +20,8 @@ This project has been developed to simulate Global Navigation Satellite System (
 
 ## Repository Organization
 	- doc: Technical documentation (including user guide).
-	- gps: GPS files project (sources and configs).
-
+	- source: GPS files project (sources and configs).
+	- tests: files for tests (sources and configs).
 ## License
 
 This project is open-source under two different licenses: GNU General Public License v3.0 for firmware and software, and CC BY-SA 4.0 for the documentation.
